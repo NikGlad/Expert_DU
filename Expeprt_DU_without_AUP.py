@@ -155,6 +155,23 @@ canvas.configure(yscrollcommand=scrollbar.set)
 canvas.pack(side="left", fill="both", expand=True)  # Размещение канваса
 scrollbar.pack(side="right", fill="y")              # Размещение ползунка
 
+# === Поддержка прокрутки колесиком ===
+def _on_mouse_wheel(event):
+    # Для Windows и Mac
+    canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+def _on_mouse_wheel_linux(event):
+    if event.num == 4:
+        canvas.yview_scroll(-1, "units")
+    elif event.num == 5:
+        canvas.yview_scroll(1, "units")
+
+canvas.bind_all("<MouseWheel>", _on_mouse_wheel)      # Windows, Mac
+canvas.bind_all("<Button-4>", _on_mouse_wheel_linux)  # Linux (scroll up)
+canvas.bind_all("<Button-5>", _on_mouse_wheel_linux)  # Linux (scroll down)
+# === конец добавки ===
+
+
 # ПРАВИТЬ
 # Переменные для чекбоксов
 var_a1 = tk.BooleanVar()
